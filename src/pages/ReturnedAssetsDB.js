@@ -6,7 +6,27 @@ import './Dashboar.css';
 const ReturnedAssetsDB = () => {
   const [assets, setAssets] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+
+  // Filters state for each column
+  const [filters, setFilters] = useState({
+    employeeId: '',
+    employeeName: '',
+    os: '',
+    systemName: '',
+    model: '',
+    processor: '',
+    ram: '',
+    storage: '',
+    adapterType: '',
+    adapterSerial: '',
+    mouseType: '',
+    mouseSerial: '',
+    headsetType: '',
+    headsetSerial: '',
+    bag: '',
+    location: '',
+    returnDate: '',
+  });
 
   useEffect(() => {
     fetchAssets();
@@ -27,7 +47,6 @@ const ReturnedAssetsDB = () => {
   };
 
   const handleDelete = (id) => {
-    console.log('Deleting asset with id:', id);
     if (window.confirm('Are you sure you want to delete this record?')) {
       axios
         .delete(`http://localhost:5000/api/assets/return/${id}`)
@@ -36,11 +55,21 @@ const ReturnedAssetsDB = () => {
     }
   };
 
-  const filteredAssets = assets.filter(asset =>
-    Object.values(asset).some(value =>
-      value?.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+  // Filter assets based on filters applied for each column
+  const filteredAssets = assets.filter((item) => {
+    return Object.entries(filters).every(([key, value]) => {
+      if (!value) return true; // no filter for this column
+      const itemValue = item[key];
+      if (!itemValue) return false;
+
+      if (key === 'returnDate') {
+        const dateString = new Date(itemValue).toLocaleDateString();
+        return dateString.toLowerCase().includes(value.toLowerCase());
+      }
+
+      return itemValue.toString().toLowerCase().includes(value.toLowerCase());
+    });
+  });
 
   const exportToExcel = () => {
     const dataWithSerials = filteredAssets.map((item, index) => ({
@@ -70,19 +99,16 @@ const ReturnedAssetsDB = () => {
     XLSX.writeFile(workbook, "Returned_Assets.xlsx");
   };
 
+  // Small inline styles for header label + input layout
+  const thStyle = { whiteSpace: 'nowrap', verticalAlign: 'middle' };
+  const flexDivStyle = { display: 'flex', alignItems: 'center', gap: '8px' };
+  const inputStyle = { width: '90px', margin: 0, padding: '2px 6px' };
+
   return (
     <div className="container">
       <h2 className="mb-3">Returned Assets Tracking</h2>
 
       <div className="d-flex justify-content-between mb-3">
-        <input
-          type="text"
-          className="form-control me-2"
-          placeholder="Search across all fields..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={{ maxWidth: '300px' }}
-        />
         <button onClick={exportToExcel} className="btn btn-success">
           Download Excel
         </button>
@@ -95,27 +121,250 @@ const ReturnedAssetsDB = () => {
           <table className="table table-striped table-bordered">
             <thead className="table-dark">
               <tr>
-                <th>S.No</th>
-                <th>Employee ID</th>
-                <th>Employee Name</th>
-                <th>OS</th>
-                <th>System Name</th>
-                <th>Model</th>
-                <th>Processor</th>
-                <th>RAM</th>
-                <th>Storage</th>
-                <th>Adapter Type</th>
-                <th>Adapter Serial</th>
-                <th>Mouse Type</th>
-                <th>Mouse Serial</th>
-                <th>Headset Type</th>
-                <th>Headset Serial</th>
-                <th>Bag</th>
-                <th>Location</th>
-                <th>Return Date</th>
-                <th>Action</th>
+                <th style={thStyle}>S.No</th>
+
+                <th style={thStyle}>
+                  <div style={flexDivStyle}>
+                    <span>Employee ID</span>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      style={inputStyle}
+                      value={filters.employeeId}
+                      onChange={(e) => setFilters((prev) => ({ ...prev, employeeId: e.target.value }))}
+                      placeholder="Filter"
+                    />
+                  </div>
+                </th>
+
+                <th style={thStyle}>
+                  <div style={flexDivStyle}>
+                    <span>Employee Name</span>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      style={{ ...inputStyle, width: '110px' }}
+                      value={filters.employeeName}
+                      onChange={(e) => setFilters((prev) => ({ ...prev, employeeName: e.target.value }))}
+                      placeholder="Filter"
+                    />
+                  </div>
+                </th>
+
+                <th style={thStyle}>
+                  <div style={flexDivStyle}>
+                    <span>OS</span>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      style={{ ...inputStyle, width: '80px' }}
+                      value={filters.os}
+                      onChange={(e) => setFilters((prev) => ({ ...prev, os: e.target.value }))}
+                      placeholder="Filter"
+                    />
+                  </div>
+                </th>
+
+                <th style={thStyle}>
+                  <div style={flexDivStyle}>
+                    <span>System Name</span>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      style={inputStyle}
+                      value={filters.systemName}
+                      onChange={(e) => setFilters((prev) => ({ ...prev, systemName: e.target.value }))}
+                      placeholder="Filter"
+                    />
+                  </div>
+                </th>
+
+                <th style={thStyle}>
+                  <div style={flexDivStyle}>
+                    <span>Model</span>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      style={inputStyle}
+                      value={filters.model}
+                      onChange={(e) => setFilters((prev) => ({ ...prev, model: e.target.value }))}
+                      placeholder="Filter"
+                    />
+                  </div>
+                </th>
+
+                <th style={thStyle}>
+                  <div style={flexDivStyle}>
+                    <span>Processor</span>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      style={inputStyle}
+                      value={filters.processor}
+                      onChange={(e) => setFilters((prev) => ({ ...prev, processor: e.target.value }))}
+                      placeholder="Filter"
+                    />
+                  </div>
+                </th>
+
+                <th style={thStyle}>
+                  <div style={flexDivStyle}>
+                    <span>RAM</span>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      style={inputStyle}
+                      value={filters.ram}
+                      onChange={(e) => setFilters((prev) => ({ ...prev, ram: e.target.value }))}
+                      placeholder="Filter"
+                    />
+                  </div>
+                </th>
+
+                <th style={thStyle}>
+                  <div style={flexDivStyle}>
+                    <span>Storage</span>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      style={inputStyle}
+                      value={filters.storage}
+                      onChange={(e) => setFilters((prev) => ({ ...prev, storage: e.target.value }))}
+                      placeholder="Filter"
+                    />
+                  </div>
+                </th>
+
+                <th style={thStyle}>
+                  <div style={flexDivStyle}>
+                    <span>Adapter Type</span>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      style={inputStyle}
+                      value={filters.adapterType}
+                      onChange={(e) => setFilters((prev) => ({ ...prev, adapterType: e.target.value }))}
+                      placeholder="Filter"
+                    />
+                  </div>
+                </th>
+
+                <th style={thStyle}>
+                  <div style={flexDivStyle}>
+                    <span>Adapter Serial</span>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      style={inputStyle}
+                      value={filters.adapterSerial}
+                      onChange={(e) => setFilters((prev) => ({ ...prev, adapterSerial: e.target.value }))}
+                      placeholder="Filter"
+                    />
+                  </div>
+                </th>
+
+                <th style={thStyle}>
+                  <div style={flexDivStyle}>
+                    <span>Mouse Type</span>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      style={inputStyle}
+                      value={filters.mouseType}
+                      onChange={(e) => setFilters((prev) => ({ ...prev, mouseType: e.target.value }))}
+                      placeholder="Filter"
+                    />
+                  </div>
+                </th>
+
+                <th style={thStyle}>
+                  <div style={flexDivStyle}>
+                    <span>Mouse Serial</span>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      style={inputStyle}
+                      value={filters.mouseSerial}
+                      onChange={(e) => setFilters((prev) => ({ ...prev, mouseSerial: e.target.value }))}
+                      placeholder="Filter"
+                    />
+                  </div>
+                </th>
+
+                <th style={thStyle}>
+                  <div style={flexDivStyle}>
+                    <span>Headset Type</span>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      style={inputStyle}
+                      value={filters.headsetType}
+                      onChange={(e) => setFilters((prev) => ({ ...prev, headsetType: e.target.value }))}
+                      placeholder="Filter"
+                    />
+                  </div>
+                </th>
+
+                <th style={thStyle}>
+                  <div style={flexDivStyle}>
+                    <span>Headset Serial</span>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      style={inputStyle}
+                      value={filters.headsetSerial}
+                      onChange={(e) => setFilters((prev) => ({ ...prev, headsetSerial: e.target.value }))}
+                      placeholder="Filter"
+                    />
+                  </div>
+                </th>
+
+                <th style={thStyle}>
+                  <div style={flexDivStyle}>
+                    <span>Bag</span>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      style={inputStyle}
+                      value={filters.bag}
+                      onChange={(e) => setFilters((prev) => ({ ...prev, bag: e.target.value }))}
+                      placeholder="Filter"
+                    />
+                  </div>
+                </th>
+
+                <th style={thStyle}>
+                  <div style={flexDivStyle}>
+                    <span>Location</span>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      style={inputStyle}
+                      value={filters.location}
+                      onChange={(e) => setFilters((prev) => ({ ...prev, location: e.target.value }))}
+                      placeholder="Filter"
+                    />
+                  </div>
+                </th>
+
+                <th style={thStyle}>
+                  <div style={flexDivStyle}>
+                    <span>Return Date</span>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      style={{ ...inputStyle, width: '100px' }}
+                      value={filters.returnDate}
+                      onChange={(e) => setFilters((prev) => ({ ...prev, returnDate: e.target.value }))}
+                      placeholder="Filter (e.g., 6/7/2025)"
+                    />
+                  </div>
+                </th>
+
+                <th style={thStyle}>Action</th>
               </tr>
             </thead>
+
             <tbody>
               {filteredAssets.length > 0 ? (
                 filteredAssets.map((item, index) => (
@@ -150,7 +399,9 @@ const ReturnedAssetsDB = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="19" className="text-center">No data available</td>
+                  <td colSpan="19" className="text-center">
+                    No data available
+                  </td>
                 </tr>
               )}
             </tbody>
