@@ -44,7 +44,7 @@ function Login() {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="password" className="form-label">Password</label>
+            <label typeof="password" htmlFor="password" className="form-label">Password</label>
             <input
               type="password"
               className="form-control form-control-sm"
