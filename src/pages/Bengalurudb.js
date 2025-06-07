@@ -5,8 +5,31 @@ import './Dashboar.css';
 
 const BengaluruDB = () => {
   const [assets, setAssets] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
+
+  // Show/hide filter row
+  const [showFilter, setShowFilter] = useState(false);
+
+  // Column-wise filters
+  const [filters, setFilters] = useState({
+    employeeId: '',
+    employeeName: '',
+    os: '',
+    systemName: '',
+    model: '',
+    processor: '',
+    ram: '',
+    storage: '',
+    adapterType: '',
+    adapterSerial: '',
+    mouseType: '',
+    mouseSerial: '',
+    headsetType: '',
+    headsetSerial: '',
+    bag: '',
+    location: '',
+    assignedDate: '',
+  });
 
   useEffect(() => {
     fetchAssets();
@@ -33,13 +56,16 @@ const BengaluruDB = () => {
     }
   };
 
-  const filteredAssets = assets.filter(asset =>
-    Object.values(asset).some(
-      value =>
-        value &&
-        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+  // Filter assets based on filters only (no global search bar)
+  const filteredAssets = assets.filter(asset => {
+    // column-wise filters check (all filters must match if set)
+    return Object.entries(filters).every(([key, filterValue]) => {
+      if (!filterValue) return true; // no filter for this column
+      const assetValue = asset[key];
+      if (!assetValue) return false;
+      return assetValue.toString().toLowerCase().includes(filterValue.toLowerCase());
+    });
+  });
 
   const exportToExcel = () => {
     const dataWithSerials = filteredAssets.map((item, index) => ({
@@ -69,19 +95,35 @@ const BengaluruDB = () => {
     XLSX.writeFile(workbook, "Bengaluru_Assets.xlsx");
   };
 
+  const handleFilterChange = (e, key) => {
+    setFilters(prev => ({
+      ...prev,
+      [key]: e.target.value,
+    }));
+  };
+
+  // Styles to keep text in one line and enable horizontal scroll on table container
+  const containerStyle = {
+    overflowX: 'auto',
+    maxHeight: "500px",
+  };
+
+  const cellStyle = {
+    whiteSpace: 'nowrap',
+  };
+
   return (
     <div className="container">
       <h2 className="mb-3">Asset Tracking</h2>
 
       <div className="d-flex justify-content-between mb-3">
-        <input
-          type="text"
-          className="form-control me-2"
-          placeholder="Search across all fields..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={{ maxWidth: "300px" }}
-        />
+        <button
+          onClick={() => setShowFilter(!showFilter)}
+          className="btn btn-outline-primary me-2"
+          title="Toggle Filters"
+        >
+          🔍 Filter
+        </button>
         <button onClick={exportToExcel} className="btn btn-success">
           Download Excel
         </button>
@@ -90,54 +132,72 @@ const BengaluruDB = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <div className="table-responsive" style={{ maxHeight: "500px", overflowY: "scroll" }}>
+        <div className="table-responsive" style={containerStyle}>
           <table className="table table-striped table-bordered">
             <thead className="table-dark">
               <tr>
-                <th>S.No</th>
-                <th>Employee ID</th>
-                <th>Employee Name</th>
-                <th>OS</th>
-                <th>Laptop BarCode No</th>
-                <th>Model</th>
-                <th>Processor</th>
-                <th>RAM</th>
-                <th>Storage</th>
-                <th>Adapter Type</th>
-                <th>Adapter Serial</th>
-                <th>Mouse Type</th>
-                <th>Mouse Serial</th>
-                <th>Headset Type</th>
-                <th>Headset Serial</th>
-                <th>Bag</th>
-                <th>Location</th>
-                <th>Assigned Date</th>
-                <th>Action</th>
+                <th style={cellStyle}>S.No</th>
+                <th style={cellStyle}>Employee ID</th>
+                <th style={cellStyle}>Employee Name</th>
+                <th style={cellStyle}>OS</th>
+                <th style={cellStyle}>Laptop BarCode No</th>
+                <th style={cellStyle}>Model</th>
+                <th style={cellStyle}>Processor</th>
+                <th style={cellStyle}>RAM</th>
+                <th style={cellStyle}>Storage</th>
+                <th style={cellStyle}>Adapter Type</th>
+                <th style={cellStyle}>Adapter Serial</th>
+                <th style={cellStyle}>Mouse Type</th>
+                <th style={cellStyle}>Mouse Serial</th>
+                <th style={cellStyle}>Headset Type</th>
+                <th style={cellStyle}>Headset Serial</th>
+                <th style={cellStyle}>Bag</th>
+                <th style={cellStyle}>Location</th>
+                <th style={cellStyle}>Assigned Date</th>
+                <th style={cellStyle}>Action</th>
               </tr>
+              {showFilter && (
+                <tr>
+                  <th></th> {/* No filter for S.No */}
+                  {Object.keys(filters).map((key) => (
+                    <th key={key}>
+                      <input
+                        type="text"
+                        className="form-control form-control-sm"
+                        placeholder={`Filter ${key.charAt(0).toUpperCase() + key.slice(1)}`}
+                        value={filters[key]}
+                        onChange={(e) => handleFilterChange(e, key)}
+                        style={{ whiteSpace: 'normal' }}
+                      />
+                    </th>
+                  ))}
+                  <th></th> {/* No filter for action */}
+                </tr>
+              )}
             </thead>
             <tbody>
               {filteredAssets.length > 0 ? (
                 filteredAssets.map((item, index) => (
                   <tr key={item.id}>
-                    <td>{index + 1}</td>
-                    <td>{item.employeeId}</td>
-                    <td>{item.employeeName}</td>
-                    <td>{item.os}</td>
-                    <td>{item.systemName}</td>
-                    <td>{item.model}</td>
-                    <td>{item.processor}</td>
-                    <td>{item.ram}</td>
-                    <td>{item.storage}</td>
-                    <td>{item.adapterType}</td>
-                    <td>{item.adapterSerial}</td>
-                    <td>{item.mouseType}</td>
-                    <td>{item.mouseSerial}</td>
-                    <td>{item.headsetType}</td>
-                    <td>{item.headsetSerial}</td>
-                    <td>{item.bag}</td>
-                    <td>{item.location}</td>
-                    <td>{item.assignedDate ? new Date(item.assignedDate).toLocaleDateString() : "N/A"}</td>
-                    <td>
+                    <td style={cellStyle}>{index + 1}</td>
+                    <td style={cellStyle}>{item.employeeId}</td>
+                    <td style={cellStyle}>{item.employeeName}</td>
+                    <td style={cellStyle}>{item.os}</td>
+                    <td style={cellStyle}>{item.systemName}</td>
+                    <td style={cellStyle}>{item.model}</td>
+                    <td style={cellStyle}>{item.processor}</td>
+                    <td style={cellStyle}>{item.ram}</td>
+                    <td style={cellStyle}>{item.storage}</td>
+                    <td style={cellStyle}>{item.adapterType}</td>
+                    <td style={cellStyle}>{item.adapterSerial}</td>
+                    <td style={cellStyle}>{item.mouseType}</td>
+                    <td style={cellStyle}>{item.mouseSerial}</td>
+                    <td style={cellStyle}>{item.headsetType}</td>
+                    <td style={cellStyle}>{item.headsetSerial}</td>
+                    <td style={cellStyle}>{item.bag}</td>
+                    <td style={cellStyle}>{item.location}</td>
+                    <td style={cellStyle}>{item.assignedDate ? new Date(item.assignedDate).toLocaleDateString() : "N/A"}</td>
+                    <td style={cellStyle}>
                       <button
                         className="btn btn-danger btn-sm"
                         onClick={() => handleDelete(item.id)}

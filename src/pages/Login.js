@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import 'bootstrap-icons/font/bootstrap-icons.css'; // Add this if using locally installed icons
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // Redirect to dashboard if already logged in
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (token) {
@@ -43,18 +44,26 @@ function Login() {
               required
             />
           </div>
+
           <div className="mb-3">
-            <label typeof="password" htmlFor="password" className="form-label">Password</label>
-            <input
-              type="password"
-              className="form-control form-control-sm"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <label htmlFor="password" className="form-label">Password</label>
+            <div className="input-group">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                className="form-control form-control-sm"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <span className="input-group-text" onClick={() => setShowPassword(!showPassword)} style={{ cursor: 'pointer' }}>
+                <i className={`bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'}`}></i>
+              </span>
+            </div>
           </div>
+
           {error && <div className="alert alert-danger">{error}</div>}
+
           <div className="d-grid">
             <button type="submit" className="btn btn-primary">Login</button>
           </div>

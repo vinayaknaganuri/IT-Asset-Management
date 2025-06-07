@@ -34,7 +34,6 @@ function App() {
 
         <div className="container mt-4 flex-grow-1">
           <Routes>
-
             {/* Redirect root based on auth */}
             <Route
               path="/"
@@ -45,81 +44,22 @@ function App() {
 
             {/* Public Routes */}
             <Route path="/home" element={<Home />} />
-            <Route
-              path="/login"
-              element={authToken ? <Navigate to="/dashboard" replace /> : <Login />}
-            />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register-return-assets" element={<ReturnAssets />} />
+            <Route path="/returned-assets-db" element={<ReturnedAssetsDB />} />
+            <Route path="/bengaluru-assets" element={<Bengaluru />} />
+            <Route path="/bengaluru-database" element={<BengaluruDB />} />
+            <Route path="/laptop-stock" element={<LaptopForm />} />
+            <Route path="/assets-stock" element={<AssetsStock />} />
+            <Route path="/laptop-stock-list" element={<LaptopFormDB />} />
+            <Route path="/assets-stock-list" element={<AssetsStockDB />} />
 
-            {/* Protected Routes */}
+            {/* Protected Route */}
             <Route
               path="/dashboard"
               element={
                 <ProtectedRoute>
                   <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/register-return-assets"
-              element={
-                <ProtectedRoute>
-                  <ReturnAssets />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/returned-assets-db"
-              element={
-                <ProtectedRoute>
-                  <ReturnedAssetsDB />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/bengaluru-assets"
-              element={
-                <ProtectedRoute>
-                  <Bengaluru />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/bengaluru-database"
-              element={
-                <ProtectedRoute>
-                  <BengaluruDB />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/laptop-stock"
-              element={
-                <ProtectedRoute>
-                  <LaptopForm />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/assets-stock"
-              element={
-                <ProtectedRoute>
-                  <AssetsStock />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/laptop-stock-list"
-              element={
-                <ProtectedRoute>
-                  <LaptopFormDB />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/assets-stock-list"
-              element={
-                <ProtectedRoute>
-                  <AssetsStockDB />
                 </ProtectedRoute>
               }
             />

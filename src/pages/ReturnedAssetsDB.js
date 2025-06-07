@@ -6,6 +6,7 @@ import './Dashboar.css';
 const ReturnedAssetsDB = () => {
   const [assets, setAssets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showFilters, setShowFilters] = useState(false);  // <-- filter toggle state
 
   // Filters state for each column
   const [filters, setFilters] = useState({
@@ -101,7 +102,7 @@ const ReturnedAssetsDB = () => {
 
   // Small inline styles for header label + input layout
   const thStyle = { whiteSpace: 'nowrap', verticalAlign: 'middle' };
-  const flexDivStyle = { display: 'flex', alignItems: 'center', gap: '8px' };
+  //const flexDivStyle = { display: 'flex', alignItems: 'center', gap: '6px' };
   const inputStyle = { width: '90px', margin: 0, padding: '2px 6px' };
 
   return (
@@ -121,11 +122,42 @@ const ReturnedAssetsDB = () => {
           <table className="table table-striped table-bordered">
             <thead className="table-dark">
               <tr>
-                <th style={thStyle}>S.No</th>
-
                 <th style={thStyle}>
-                  <div style={flexDivStyle}>
-                    <span>Employee ID</span>
+                  S.No
+                  <button
+                    style={{ marginLeft: '8px', cursor: 'pointer', background: 'none', border: 'none', color: 'white', fontSize: '18px' }}
+                    onClick={() => setShowFilters(!showFilters)}
+                    title={showFilters ? "Hide Filters" : "Show Filters"}
+                  >
+                    🔍
+                  </button>
+                </th>
+                {/* For the other headers, just show label only */}
+                <th style={thStyle}>Employee ID</th>
+                <th style={thStyle}>Employee Name</th>
+                <th style={thStyle}>OS</th>
+                <th style={thStyle}>System Name</th>
+                <th style={thStyle}>Model</th>
+                <th style={thStyle}>Processor</th>
+                <th style={thStyle}>RAM</th>
+                <th style={thStyle}>Storage</th>
+                <th style={thStyle}>Adapter Type</th>
+                <th style={thStyle}>Adapter Serial</th>
+                <th style={thStyle}>Mouse Type</th>
+                <th style={thStyle}>Mouse Serial</th>
+                <th style={thStyle}>Headset Type</th>
+                <th style={thStyle}>Headset Serial</th>
+                <th style={thStyle}>Bag</th>
+                <th style={thStyle}>Location</th>
+                <th style={thStyle}>Return Date</th>
+                <th style={thStyle}>Action</th>
+              </tr>
+
+              {/* Filter Inputs row - only visible if showFilters is true */}
+              {showFilters && (
+                <tr>
+                  <th></th>
+                  <th>
                     <input
                       type="text"
                       className="form-control form-control-sm"
@@ -134,12 +166,8 @@ const ReturnedAssetsDB = () => {
                       onChange={(e) => setFilters((prev) => ({ ...prev, employeeId: e.target.value }))}
                       placeholder="Filter"
                     />
-                  </div>
-                </th>
-
-                <th style={thStyle}>
-                  <div style={flexDivStyle}>
-                    <span>Employee Name</span>
+                  </th>
+                  <th>
                     <input
                       type="text"
                       className="form-control form-control-sm"
@@ -148,12 +176,8 @@ const ReturnedAssetsDB = () => {
                       onChange={(e) => setFilters((prev) => ({ ...prev, employeeName: e.target.value }))}
                       placeholder="Filter"
                     />
-                  </div>
-                </th>
-
-                <th style={thStyle}>
-                  <div style={flexDivStyle}>
-                    <span>OS</span>
+                  </th>
+                  <th>
                     <input
                       type="text"
                       className="form-control form-control-sm"
@@ -162,12 +186,8 @@ const ReturnedAssetsDB = () => {
                       onChange={(e) => setFilters((prev) => ({ ...prev, os: e.target.value }))}
                       placeholder="Filter"
                     />
-                  </div>
-                </th>
-
-                <th style={thStyle}>
-                  <div style={flexDivStyle}>
-                    <span>System Name</span>
+                  </th>
+                  <th>
                     <input
                       type="text"
                       className="form-control form-control-sm"
@@ -176,12 +196,8 @@ const ReturnedAssetsDB = () => {
                       onChange={(e) => setFilters((prev) => ({ ...prev, systemName: e.target.value }))}
                       placeholder="Filter"
                     />
-                  </div>
-                </th>
-
-                <th style={thStyle}>
-                  <div style={flexDivStyle}>
-                    <span>Model</span>
+                  </th>
+                  <th>
                     <input
                       type="text"
                       className="form-control form-control-sm"
@@ -190,12 +206,8 @@ const ReturnedAssetsDB = () => {
                       onChange={(e) => setFilters((prev) => ({ ...prev, model: e.target.value }))}
                       placeholder="Filter"
                     />
-                  </div>
-                </th>
-
-                <th style={thStyle}>
-                  <div style={flexDivStyle}>
-                    <span>Processor</span>
+                  </th>
+                  <th>
                     <input
                       type="text"
                       className="form-control form-control-sm"
@@ -204,12 +216,8 @@ const ReturnedAssetsDB = () => {
                       onChange={(e) => setFilters((prev) => ({ ...prev, processor: e.target.value }))}
                       placeholder="Filter"
                     />
-                  </div>
-                </th>
-
-                <th style={thStyle}>
-                  <div style={flexDivStyle}>
-                    <span>RAM</span>
+                  </th>
+                  <th>
                     <input
                       type="text"
                       className="form-control form-control-sm"
@@ -218,12 +226,8 @@ const ReturnedAssetsDB = () => {
                       onChange={(e) => setFilters((prev) => ({ ...prev, ram: e.target.value }))}
                       placeholder="Filter"
                     />
-                  </div>
-                </th>
-
-                <th style={thStyle}>
-                  <div style={flexDivStyle}>
-                    <span>Storage</span>
+                  </th>
+                  <th>
                     <input
                       type="text"
                       className="form-control form-control-sm"
@@ -232,12 +236,8 @@ const ReturnedAssetsDB = () => {
                       onChange={(e) => setFilters((prev) => ({ ...prev, storage: e.target.value }))}
                       placeholder="Filter"
                     />
-                  </div>
-                </th>
-
-                <th style={thStyle}>
-                  <div style={flexDivStyle}>
-                    <span>Adapter Type</span>
+                  </th>
+                  <th>
                     <input
                       type="text"
                       className="form-control form-control-sm"
@@ -246,12 +246,8 @@ const ReturnedAssetsDB = () => {
                       onChange={(e) => setFilters((prev) => ({ ...prev, adapterType: e.target.value }))}
                       placeholder="Filter"
                     />
-                  </div>
-                </th>
-
-                <th style={thStyle}>
-                  <div style={flexDivStyle}>
-                    <span>Adapter Serial</span>
+                  </th>
+                  <th>
                     <input
                       type="text"
                       className="form-control form-control-sm"
@@ -260,12 +256,8 @@ const ReturnedAssetsDB = () => {
                       onChange={(e) => setFilters((prev) => ({ ...prev, adapterSerial: e.target.value }))}
                       placeholder="Filter"
                     />
-                  </div>
-                </th>
-
-                <th style={thStyle}>
-                  <div style={flexDivStyle}>
-                    <span>Mouse Type</span>
+                  </th>
+                  <th>
                     <input
                       type="text"
                       className="form-control form-control-sm"
@@ -274,12 +266,8 @@ const ReturnedAssetsDB = () => {
                       onChange={(e) => setFilters((prev) => ({ ...prev, mouseType: e.target.value }))}
                       placeholder="Filter"
                     />
-                  </div>
-                </th>
-
-                <th style={thStyle}>
-                  <div style={flexDivStyle}>
-                    <span>Mouse Serial</span>
+                  </th>
+                  <th>
                     <input
                       type="text"
                       className="form-control form-control-sm"
@@ -288,12 +276,8 @@ const ReturnedAssetsDB = () => {
                       onChange={(e) => setFilters((prev) => ({ ...prev, mouseSerial: e.target.value }))}
                       placeholder="Filter"
                     />
-                  </div>
-                </th>
-
-                <th style={thStyle}>
-                  <div style={flexDivStyle}>
-                    <span>Headset Type</span>
+                  </th>
+                  <th>
                     <input
                       type="text"
                       className="form-control form-control-sm"
@@ -302,12 +286,8 @@ const ReturnedAssetsDB = () => {
                       onChange={(e) => setFilters((prev) => ({ ...prev, headsetType: e.target.value }))}
                       placeholder="Filter"
                     />
-                  </div>
-                </th>
-
-                <th style={thStyle}>
-                  <div style={flexDivStyle}>
-                    <span>Headset Serial</span>
+                  </th>
+                  <th>
                     <input
                       type="text"
                       className="form-control form-control-sm"
@@ -316,12 +296,8 @@ const ReturnedAssetsDB = () => {
                       onChange={(e) => setFilters((prev) => ({ ...prev, headsetSerial: e.target.value }))}
                       placeholder="Filter"
                     />
-                  </div>
-                </th>
-
-                <th style={thStyle}>
-                  <div style={flexDivStyle}>
-                    <span>Bag</span>
+                  </th>
+                  <th>
                     <input
                       type="text"
                       className="form-control form-control-sm"
@@ -330,12 +306,8 @@ const ReturnedAssetsDB = () => {
                       onChange={(e) => setFilters((prev) => ({ ...prev, bag: e.target.value }))}
                       placeholder="Filter"
                     />
-                  </div>
-                </th>
-
-                <th style={thStyle}>
-                  <div style={flexDivStyle}>
-                    <span>Location</span>
+                  </th>
+                  <th>
                     <input
                       type="text"
                       className="form-control form-control-sm"
@@ -344,12 +316,8 @@ const ReturnedAssetsDB = () => {
                       onChange={(e) => setFilters((prev) => ({ ...prev, location: e.target.value }))}
                       placeholder="Filter"
                     />
-                  </div>
-                </th>
-
-                <th style={thStyle}>
-                  <div style={flexDivStyle}>
-                    <span>Return Date</span>
+                  </th>
+                  <th>
                     <input
                       type="text"
                       className="form-control form-control-sm"
@@ -358,11 +326,10 @@ const ReturnedAssetsDB = () => {
                       onChange={(e) => setFilters((prev) => ({ ...prev, returnDate: e.target.value }))}
                       placeholder="Filter (e.g., 6/7/2025)"
                     />
-                  </div>
-                </th>
-
-                <th style={thStyle}>Action</th>
-              </tr>
+                  </th>
+                  <th></th>
+                </tr>
+              )}
             </thead>
 
             <tbody>

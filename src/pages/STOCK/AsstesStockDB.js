@@ -7,17 +7,16 @@ const AssetsStockDB = () => {
   const [filteredStock, setFilteredStock] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [searchTerm] = useState('');
 
-  const [typeFilter, setTypeFilter] = useState('');
-  const [nameFilter, setNameFilter] = useState('');
-  const [barcodeFilter, setBarcodeFilter] = useState('');
-  const [locationFilter, setLocationFilter] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
 
-  const [showTypeFilter, setShowTypeFilter] = useState(false);
-  const [showNameFilter, setShowNameFilter] = useState(false);
-  const [showBarcodeFilter, setShowBarcodeFilter] = useState(false);
-  const [showLocationFilter, setShowLocationFilter] = useState(false);
+  // Filters state for all columns
+  const [filters, setFilters] = useState({
+    deviceType: '',
+    deviceName: '',
+    barcode: '',
+    location: '',
+  });
 
   useEffect(() => {
     const fetchStock = async () => {
@@ -39,36 +38,23 @@ const AssetsStockDB = () => {
   useEffect(() => {
     let filtered = stock;
 
-    if (typeFilter) {
-      filtered = filtered.filter(item =>
-        item.deviceType.toLowerCase().includes(typeFilter.toLowerCase())
-      );
-    }
-    if (nameFilter) {
-      filtered = filtered.filter(item =>
-        item.deviceName.toLowerCase().includes(nameFilter.toLowerCase())
-      );
-    }
-    if (barcodeFilter) {
-      filtered = filtered.filter(item =>
-        item.barcode.toLowerCase().includes(barcodeFilter.toLowerCase())
-      );
-    }
-    if (locationFilter) {
-      filtered = filtered.filter(item =>
-        item.location.toLowerCase().includes(locationFilter.toLowerCase())
-      );
-    }
-
-    if (searchTerm) {
-      filtered = filtered.filter(item =>
-        [item.deviceType, item.deviceName, item.barcode, item.location]
-          .some(field => field.toLowerCase().includes(searchTerm.toLowerCase()))
-      );
-    }
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) {
+        filtered = filtered.filter(item =>
+          item[key].toLowerCase().includes(value.toLowerCase())
+        );
+      }
+    });
 
     setFilteredStock(filtered);
-  }, [stock, typeFilter, nameFilter, barcodeFilter, locationFilter, searchTerm]);
+  }, [stock, filters]);
+
+  const handleFilterChange = (e, key) => {
+    setFilters(prev => ({
+      ...prev,
+      [key]: e.target.value,
+    }));
+  };
 
   const handleDelete = async (barcode) => {
     if (!window.confirm('Are you sure you want to delete this item?')) return;
@@ -108,7 +94,6 @@ const AssetsStockDB = () => {
       <h2 className="heading">Assets Stock Database</h2>
 
       <div className="top-bar">
-         
         <button className="download-button" onClick={handleExportToExcel}>
           📥 Download Excel
         </button>
@@ -121,62 +106,67 @@ const AssetsStockDB = () => {
         <table className="table">
           <thead>
             <tr>
-              <th className="th">S.No</th>
-
               <th className="th">
-                Type
-                <button className="filter-toggle-btn" onClick={() => setShowTypeFilter(!showTypeFilter)}>🔍</button>
-                {showTypeFilter && (
-                  <input
-                    type="text"
-                    value={typeFilter}
-                    onChange={(e) => setTypeFilter(e.target.value)}
-                    className="filter-input"
-                  />
-                )}
+                <div className="header-with-icon">
+                  <span>S.No</span>
+                  <button
+                    className="filter-toggle-btn"
+                    onClick={() => setShowFilters(!showFilters)}
+                    title="Toggle Filters"
+                    aria-label="Toggle Filters"
+                  >
+                    🔍
+                  </button>
+                </div>
               </th>
-
-              <th className="th">
-                Name
-                <button className="filter-toggle-btn" onClick={() => setShowNameFilter(!showNameFilter)}>🔍</button>
-                {showNameFilter && (
-                  <input
-                    type="text"
-                    value={nameFilter}
-                    onChange={(e) => setNameFilter(e.target.value)}
-                    className="filter-input"
-                  />
-                )}
-              </th>
-
-              <th className="th">
-                Barcode
-                <button className="filter-toggle-btn" onClick={() => setShowBarcodeFilter(!showBarcodeFilter)}>🔍</button>
-                {showBarcodeFilter && (
-                  <input
-                    type="text"
-                    value={barcodeFilter}
-                    onChange={(e) => setBarcodeFilter(e.target.value)}
-                    className="filter-input"
-                  />
-                )}
-              </th>
-
-              <th className="th">
-                Location
-                <button className="filter-toggle-btn" onClick={() => setShowLocationFilter(!showLocationFilter)}>🔍</button>
-                {showLocationFilter && (
-                  <input
-                    type="text"
-                    value={locationFilter}
-                    onChange={(e) => setLocationFilter(e.target.value)}
-                    className="filter-input"
-                  />
-                )}
-              </th>
-
+              <th className="th">Type</th>
+              <th className="th">Name</th>
+              <th className="th">Barcode</th>
+              <th className="th">Location</th>
               <th className="th">Actions</th>
             </tr>
+            {showFilters && (
+              <tr>
+                <th></th>
+                <th>
+                  <input
+                    type="text"
+                    className="filter-input"
+                    placeholder="Filter Type"
+                    value={filters.deviceType}
+                    onChange={e => handleFilterChange(e, 'deviceType')}
+                  />
+                </th>
+                <th>
+                  <input
+                    type="text"
+                    className="filter-input"
+                    placeholder="Filter Name"
+                    value={filters.deviceName}
+                    onChange={e => handleFilterChange(e, 'deviceName')}
+                  />
+                </th>
+                <th>
+                  <input
+                    type="text"
+                    className="filter-input"
+                    placeholder="Filter Barcode"
+                    value={filters.barcode}
+                    onChange={e => handleFilterChange(e, 'barcode')}
+                  />
+                </th>
+                <th>
+                  <input
+                    type="text"
+                    className="filter-input"
+                    placeholder="Filter Location"
+                    value={filters.location}
+                    onChange={e => handleFilterChange(e, 'location')}
+                  />
+                </th>
+                <th></th>
+              </tr>
+            )}
           </thead>
           <tbody>
             {filteredStock.length === 0 ? (

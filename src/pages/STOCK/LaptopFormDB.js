@@ -4,6 +4,7 @@ import './Stock.css';
 const LaptopDB = () => {
   const [laptops, setLaptops] = useState([]);
   const [error, setError] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
 
   const [filters, setFilters] = useState({
     os: '',
@@ -12,15 +13,6 @@ const LaptopDB = () => {
     processor: '',
     ram: '',
     storage: '',
-  });
-
-  const [showSearch, setShowSearch] = useState({
-    os: false,
-    systemName: false,
-    model: false,
-    processor: false,
-    ram: false,
-    storage: false,
   });
 
   useEffect(() => {
@@ -85,11 +77,8 @@ const LaptopDB = () => {
     laptop.storage?.toLowerCase().includes(filters.storage.toLowerCase())
   );
 
-  const toggleSearch = (key) => {
-    setShowSearch((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
+  const handleFilterChange = (e, key) => {
+    setFilters((prev) => ({ ...prev, [key]: e.target.value }));
   };
 
   return (
@@ -105,124 +94,86 @@ const LaptopDB = () => {
         <table>
           <thead>
             <tr>
-              <th>S.No.</th>
-
-              {/* OS */}
-              <th className="nowrap-header">
+              <th>
                 <div className="header-flex">
-                  <span>OS</span>
-                  <button className="small-toggle-btn" onClick={() => toggleSearch('os')} title="Toggle OS Search">🔍</button>
+                  <span>S.No.</span>
+                  <button
+                    className="small-toggle-btn"
+                    onClick={() => setShowFilters(!showFilters)}
+                    title="Toggle Filters"
+                  >
+                    🔍
+                  </button>
                 </div>
-                {showSearch.os && (
+              </th>
+              <th><span className="header-flex">OS</span></th>
+              <th><span className="header-flex">Laptop Barcode No.</span></th>
+              <th><span className="header-flex">Model</span></th>
+              <th><span className="header-flex">Processor</span></th>
+              <th><span className="header-flex">RAM</span></th>
+              <th><span className="header-flex">Storage</span></th>
+              <th><span className="header-flex">Action</span></th>
+            </tr>
+            {showFilters && (
+              <tr>
+                <th></th>
+                <th>
                   <input
                     type="text"
                     className="filter-input"
                     placeholder="Search OS"
                     value={filters.os}
-                    onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, os: e.target.value }))
-                    }
+                    onChange={(e) => handleFilterChange(e, 'os')}
                   />
-                )}
-              </th>
-
-              {/* System Name */}
-              <th className="nowrap-header">
-                <div className="header-flex">
-                  <span>Laptop Barcode No.</span>
-                  <button className="small-toggle-btn" onClick={() => toggleSearch('systemName')} title="Toggle Barcode Search">🔍</button>
-                </div>
-                {showSearch.systemName && (
+                </th>
+                <th>
                   <input
                     type="text"
                     className="filter-input"
                     placeholder="Search Barcode"
                     value={filters.systemName}
-                    onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, systemName: e.target.value }))
-                    }
+                    onChange={(e) => handleFilterChange(e, 'systemName')}
                   />
-                )}
-              </th>
-
-              {/* Model */}
-              <th className="nowrap-header">
-                <div className="header-flex">
-                  <span>Model</span>
-                  <button className="small-toggle-btn" onClick={() => toggleSearch('model')} title="Toggle Model Search">🔍</button>
-                </div>
-                {showSearch.model && (
+                </th>
+                <th>
                   <input
                     type="text"
                     className="filter-input"
                     placeholder="Search Model"
                     value={filters.model}
-                    onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, model: e.target.value }))
-                    }
+                    onChange={(e) => handleFilterChange(e, 'model')}
                   />
-                )}
-              </th>
-
-              {/* Processor */}
-              <th className="nowrap-header">
-                <div className="header-flex">
-                  <span>Processor</span>
-                  <button className="small-toggle-btn" onClick={() => toggleSearch('processor')} title="Toggle Processor Search">🔍</button>
-                </div>
-                {showSearch.processor && (
+                </th>
+                <th>
                   <input
                     type="text"
                     className="filter-input"
                     placeholder="Search Processor"
                     value={filters.processor}
-                    onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, processor: e.target.value }))
-                    }
+                    onChange={(e) => handleFilterChange(e, 'processor')}
                   />
-                )}
-              </th>
-
-              {/* RAM */}
-              <th className="nowrap-header">
-                <div className="header-flex">
-                  <span>RAM</span>
-                  <button className="small-toggle-btn" onClick={() => toggleSearch('ram')} title="Toggle RAM Search">🔍</button>
-                </div>
-                {showSearch.ram && (
+                </th>
+                <th>
                   <input
                     type="text"
                     className="filter-input"
                     placeholder="Search RAM"
                     value={filters.ram}
-                    onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, ram: e.target.value }))
-                    }
+                    onChange={(e) => handleFilterChange(e, 'ram')}
                   />
-                )}
-              </th>
-
-              {/* Storage */}
-              <th className="nowrap-header">
-                <div className="header-flex">
-                  <span>Storage</span>
-                  <button className="small-toggle-btn" onClick={() => toggleSearch('storage')} title="Toggle Storage Search">🔍</button>
-                </div>
-                {showSearch.storage && (
+                </th>
+                <th>
                   <input
                     type="text"
                     className="filter-input"
                     placeholder="Search Storage"
                     value={filters.storage}
-                    onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, storage: e.target.value }))
-                    }
+                    onChange={(e) => handleFilterChange(e, 'storage')}
                   />
-                )}
-              </th>
-
-              <th>Action</th>
-            </tr>
+                </th>
+                <th></th>
+              </tr>
+            )}
           </thead>
           <tbody>
             {filteredLaptops.length === 0 ? (
