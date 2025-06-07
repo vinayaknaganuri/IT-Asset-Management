@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 
 import Navbar from './components/Navbar.js';
@@ -25,6 +25,8 @@ import AssetsStockDB from './pages/STOCK/AsstesStockDB.js';
 import ProtectedRoute from './pages/ProtectedRoute.js';
 
 function App() {
+  const authToken = localStorage.getItem('authToken');
+
   return (
     <Router>
       <div className="d-flex flex-column min-vh-100">
@@ -32,9 +34,21 @@ function App() {
 
         <div className="container mt-4 flex-grow-1">
           <Routes>
+
+            {/* Redirect root based on auth */}
+            <Route
+              path="/"
+              element={
+                authToken ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
+              }
+            />
+
             {/* Public Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/home" element={<Home />} />
+            <Route
+              path="/login"
+              element={authToken ? <Navigate to="/dashboard" replace /> : <Login />}
+            />
 
             {/* Protected Routes */}
             <Route

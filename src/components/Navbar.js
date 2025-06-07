@@ -27,7 +27,7 @@ function Navbar() {
       </div>
 
       <div className="d-flex gap-2">
-        <Link to="/">
+        <Link to="/Home">
           <Button color="primary" aria-label="Home page">
             Home
           </Button>
