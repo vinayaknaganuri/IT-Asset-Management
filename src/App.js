@@ -3,12 +3,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
-
-// Shared layout components
 import Navbar from './components/Navbar.js';
 import Footer from './components/Footer.js';
 
-// Main pages
+// Pages
 import Home from './pages/Home.js';
 import ReturnAssets from './pages/ReturnAssets.js';
 import ReturnedAssetsDB from './pages/ReturnedAssetsDB.js';
@@ -19,9 +17,12 @@ import BengaluruDB from './pages/Bengalurudb.js';
 
 // Stock pages
 import LaptopForm from './pages/STOCK/LaptopForm.js';
-import AssetsStock from './pages/STOCK/AsstesStock.js';       // consider renaming file to AssetsStock.js
+import AssetsStock from './pages/STOCK/AsstesStock.js';
 import LaptopFormDB from './pages/STOCK/LaptopFormDB.js';
-import AssetsStockDB from './pages/STOCK/AsstesStockDB.js';   // consider renaming file to AssetsStockDB.js
+import AssetsStockDB from './pages/STOCK/AsstesStockDB.js';
+
+// Protected route wrapper
+import ProtectedRoute from './pages/ProtectedRoute.js';
 
 function App() {
   return (
@@ -31,26 +32,83 @@ function App() {
 
         <div className="container mt-4 flex-grow-1">
           <Routes>
-            {/* Home & Auth */}
+            {/* Public Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
 
-            {/* Asset Return */}
-            <Route path="/register-return-assets" element={<ReturnAssets />} />
-            <Route path="/returned-assets-db" element={<ReturnedAssetsDB />} />
-
-            {/* Asset Dashboard */}
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/bengaluru-assets" element={<Bengaluru />} />
-            <Route path="/bengaluru-database" element={<BengaluruDB />} />
-
-            {/* Stock Registration */}
-            <Route path="/laptop-stock" element={<LaptopForm />} />
-            <Route path="/assets-stock" element={<AssetsStock />} />
-
-            {/* Stock Databases */}
-            <Route path="/laptop-stock-list" element={<LaptopFormDB />} />
-            <Route path="/assets-stock-list" element={<AssetsStockDB />} />
+            {/* Protected Routes */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/register-return-assets"
+              element={
+                <ProtectedRoute>
+                  <ReturnAssets />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/returned-assets-db"
+              element={
+                <ProtectedRoute>
+                  <ReturnedAssetsDB />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/bengaluru-assets"
+              element={
+                <ProtectedRoute>
+                  <Bengaluru />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/bengaluru-database"
+              element={
+                <ProtectedRoute>
+                  <BengaluruDB />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/laptop-stock"
+              element={
+                <ProtectedRoute>
+                  <LaptopForm />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/assets-stock"
+              element={
+                <ProtectedRoute>
+                  <AssetsStock />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/laptop-stock-list"
+              element={
+                <ProtectedRoute>
+                  <LaptopFormDB />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/assets-stock-list"
+              element={
+                <ProtectedRoute>
+                  <AssetsStockDB />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </div>
 
