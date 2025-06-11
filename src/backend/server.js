@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
+
 
 const app = express();
 const port = 5000;
@@ -9,12 +11,20 @@ const port = 5000;
 app.use(cors());
 app.use(express.json());
 
-// MySQL Connection
+// // MySQL Connection
+// const db = mysql.createConnection({
+//   host: 'localhost',
+//   user: 'root',
+//   password: '',  // add your password if needed
+//   database: 'bengaluru_db',
+// });
+
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',  // add your password if needed
-  database: 'bengaluru_db',
+  host: 'sql5.freesqldatabase.com',
+  user: 'sql5784164',
+  password: 'P3KdBITzgI',
+  database: 'sql5784164',
+  port: 3306,
 });
 
 // Connect to DB

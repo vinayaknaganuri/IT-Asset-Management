@@ -37,7 +37,7 @@ const BengaluruDB = () => {
 
   const fetchAssets = () => {
     setLoading(true);
-    axios.get(`${process.env.REACT_APP_API_URL}/api/assets/bengaluru`)
+    axios.get(`http://localhost:5000/api/assets/bengaluru`)
       .then(res => {
         setAssets(res.data);
         setLoading(false);
@@ -50,7 +50,7 @@ const BengaluruDB = () => {
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this record?")) {
-      axios.delete(`${process.env.REACT_APP_API_URL}/api/assets/bengaluru/${id}`)
+      axios.delete(`http://localhost:5000/api/assets/bengaluru/${id}`)
         .then(() => fetchAssets())
         .catch(err => console.error('Error deleting asset:', err));
     }
