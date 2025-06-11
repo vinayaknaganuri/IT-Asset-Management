@@ -51,8 +51,8 @@ function App() {
             <Route path="/bengalurudatabase" element={<BengaluruDB />} />
             <Route path="/laptopstock" element={<LaptopForm />} />
             <Route path="/assetsstock" element={<AssetsStock />} />
-            <Route path="/laptopstock-list" element={<LaptopFormDB />} />
-            <Route path="/assetsstock-list" element={<AssetsStockDB />} />
+            <Route path="/laptopstocklist" element={<LaptopFormDB />} />
+            <Route path="/assetsstocklist" element={<AssetsStockDB />} />
 
             {/* Protected Route */}
             <Route

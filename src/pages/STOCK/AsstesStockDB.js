@@ -7,10 +7,9 @@ const AssetsStockDB = () => {
   const [filteredStock, setFilteredStock] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
   const [showFilters, setShowFilters] = useState(false);
 
-  // Filters state for all columns
+  // Filters for each column
   const [filters, setFilters] = useState({
     deviceType: '',
     deviceName: '',
@@ -18,12 +17,14 @@ const AssetsStockDB = () => {
     location: '',
   });
 
+  // Fetch data from backend
   useEffect(() => {
     const fetchStock = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/stock-devices');
         if (!response.ok) throw new Error('Failed to fetch stock data');
         const data = await response.json();
+        console.log("Fetched data:", data); // Debug: check keys
         setStock(data);
         setFilteredStock(data);
       } catch (err) {
@@ -35,13 +36,14 @@ const AssetsStockDB = () => {
     fetchStock();
   }, []);
 
+  // Apply filters to data
   useEffect(() => {
     let filtered = stock;
 
     Object.entries(filters).forEach(([key, value]) => {
       if (value) {
         filtered = filtered.filter(item =>
-          item[key].toLowerCase().includes(value.toLowerCase())
+          item[key]?.toString().toLowerCase().includes(value.toLowerCase())
         );
       }
     });
@@ -49,6 +51,7 @@ const AssetsStockDB = () => {
     setFilteredStock(filtered);
   }, [stock, filters]);
 
+  // Filter input handler
   const handleFilterChange = (e, key) => {
     setFilters(prev => ({
       ...prev,
@@ -56,6 +59,7 @@ const AssetsStockDB = () => {
     }));
   };
 
+  // Delete item by barcode
   const handleDelete = async (barcode) => {
     if (!window.confirm('Are you sure you want to delete this item?')) return;
 
@@ -74,6 +78,7 @@ const AssetsStockDB = () => {
     }
   };
 
+  // Export to Excel
   const handleExportToExcel = () => {
     const wsData = filteredStock.map((item, index) => ({
       'S.No': index + 1,

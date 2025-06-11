@@ -34,7 +34,7 @@ function Navbar() {
         </Link>
 
         {isLoggedIn && (
-          <Link to="/register-return-assets">
+          <Link to="/registerreturnassets">
             <Button color="primary" aria-label="Register Return Assets page">
               Return Assets
             </Button>

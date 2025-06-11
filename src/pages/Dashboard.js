@@ -31,7 +31,7 @@ const Dashboard = () => {
               <Link className="nav-link" to="/assetsstock">📦 Assets Registration</Link>
             </li>
             <li className="nav-item mb-2">
-              <Link className="nav-link" to="/assetsstock-list">📦 Assets Stock List</Link>
+              <Link className="nav-link" to="/assetsstocklist">📦 Assets Stock List</Link>
             </li>
           </ul>
         </aside>
