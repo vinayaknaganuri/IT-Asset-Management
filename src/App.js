@@ -45,14 +45,14 @@ function App() {
             {/* Public Routes */}
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/register-return-assets" element={<ReturnAssets />} />
-            <Route path="/returned-assets-db" element={<ReturnedAssetsDB />} />
-            <Route path="/bengaluru-assets" element={<Bengaluru />} />
-            <Route path="/bengaluru-database" element={<BengaluruDB />} />
-            <Route path="/laptop-stock" element={<LaptopForm />} />
-            <Route path="/assets-stock" element={<AssetsStock />} />
-            <Route path="/laptop-stock-list" element={<LaptopFormDB />} />
-            <Route path="/assets-stock-list" element={<AssetsStockDB />} />
+            <Route path="/registerreturnassets" element={<ReturnAssets />} />
+            <Route path="/returnedassetsdb" element={<ReturnedAssetsDB />} />
+            <Route path="/bengaluruassets" element={<Bengaluru />} />
+            <Route path="/bengalurudatabase" element={<BengaluruDB />} />
+            <Route path="/laptopstock" element={<LaptopForm />} />
+            <Route path="/assetsstock" element={<AssetsStock />} />
+            <Route path="/laptopstock-list" element={<LaptopFormDB />} />
+            <Route path="/assetsstock-list" element={<AssetsStockDB />} />
 
             {/* Protected Route */}
             <Route
