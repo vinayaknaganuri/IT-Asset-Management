@@ -1,9 +1,10 @@
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
@@ -11,10 +12,11 @@ app.use(express.json());
 
 // MySQL Connection
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',  // add your password if needed
-  database: 'bengaluru_db',
+  host: process.env.DB_HOST || 'sql5.freesqldatabase.com',
+  user: process.env.DB_USER || 'sql5784164',
+  password: process.env.DB_PASS || 'P3KdBITzgI',
+  database: process.env.DB_NAME || 'sql5784164',
+  port: process.env.DB_PORT || 3306
 });
 
 // Connect to DB
