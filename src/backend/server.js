@@ -12,12 +12,13 @@ app.use(express.json());
 
 // MySQL Connection
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || 'sql5.freesqldatabase.com',
-  user: process.env.DB_USER || 'sql5784164',
-  password: process.env.DB_PASS || 'P3KdBITzgI',
-  database: process.env.DB_NAME || 'sql5784164',
-  port: process.env.DB_PORT || 3306
+  host: 'sql5.freesqldatabase.com',
+  user: 'sql5784164',
+  password: 'P3KdBITzgI',
+  database: 'sql5784164',
+  port: 3306
 });
+
 
 // Connect to DB
 db.connect(err => {
