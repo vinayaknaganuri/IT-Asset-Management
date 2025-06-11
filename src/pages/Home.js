@@ -14,7 +14,7 @@ function Home() {
 
       <div className="row text-center">
         <div className="col-md-4 mb-3">
-          <Link to="/bengaluru-assets">
+          <Link to="/bengaluruassets">
             <Button color="primary" className="w-100">
                Asset Registration
             </Button>
@@ -24,7 +24,7 @@ function Home() {
         
 
         <div className="col-md-4 mb-3">
-          <Link to="/register-return-assets">
+          <Link to="/registerreturnassets">
             <Button color="primary" className="w-100">
               Return Assets Registration
             </Button>

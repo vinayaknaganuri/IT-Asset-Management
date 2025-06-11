@@ -16,22 +16,22 @@ const Dashboard = () => {
         <aside className="sidebar bg-white border-end p-3">
           <ul className="nav flex-column">
             <li className="nav-item mb-2">
-              <Link className="nav-link" to="/bengaluru-database">🧑‍💼 Employee Assets</Link>
+              <Link className="nav-link" to="/bengalurudatabase">🧑‍💼 Employee Assets</Link>
             </li>
             <li className="nav-item mb-2">
-              <Link className="nav-link" to="/returned-assets-db">🔁 Return Assets</Link>
+              <Link className="nav-link" to="/returnedassetsdb">🔁 Return Assets</Link>
             </li>
             <li className="nav-item mb-2">
-              <Link className="nav-link" to="/laptop-stock">💻 Laptop Registration</Link>
+              <Link className="nav-link" to="/laptopstock">💻 Laptop Registration</Link>
             </li>
             <li className="nav-item mb-2">
-              <Link className="nav-link" to="/Laptop-Stock-List">💻 Laptop Stock</Link>
+              <Link className="nav-link" to="/LaptopStockList">💻 Laptop Stock</Link>
             </li>
             <li className="nav-item mb-2">
-              <Link className="nav-link" to="/assets-stock">📦 Assets Registration</Link>
+              <Link className="nav-link" to="/assetsstock">📦 Assets Registration</Link>
             </li>
             <li className="nav-item mb-2">
-              <Link className="nav-link" to="/assets-stock-list">📦 Assets Stock List</Link>
+              <Link className="nav-link" to="/assetsstock-list">📦 Assets Stock List</Link>
             </li>
           </ul>
         </aside>
